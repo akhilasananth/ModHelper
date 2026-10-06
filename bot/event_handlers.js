@@ -2,13 +2,18 @@ import {config} from "./config.js";
 import {
     createEventChats,
     getEventsWithoutPrivateChat,
-    printNewEventSubscribersToPrivateThreads
+    printNewIntroducedEventSubscribers
 } from "./functions.js";
 
 
 export async function handleReady(client) {
     const server = await client.guilds.fetch(config.serverId);
     const serverEvents = await server.scheduledEvents.fetch();
+
+    if (serverEvents.size == 0) {
+        console.log(`INFO: No active server events found for Server: ${config.serverId}`);
+        return;
+    }
 
     const channel = server?.channels.cache.get(config.channelId);
 
@@ -29,15 +34,5 @@ export async function handleReady(client) {
     }
 
     // The bot might not always be running, compare the number of people in the chat and the event and add members who are not in the chat
-    await printNewEventSubscribersToPrivateThreads(channelThreads, serverEvents)
+    await printNewIntroducedEventSubscribers(channelThreads, serverEvents)
 }
-
-async function handleScheduledEventCreate(event) {
-    // Create the thread
-    // Send the intro message
-}
-
-async function handleScheduledEventUpdate(oldEvent, newEvent) {
-    // Update the thread/subscribers if necessary
-}
-

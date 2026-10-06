@@ -14,8 +14,7 @@ client = discord.Client(intents=intents)
 new_members = {
     # member.id: name
     # 'sdf04527': 'TestUser'
-    '.orangeblossoms': 'Victoria',
-    'nokhod_chi' : 'Arya'
+    'rash021395' : 'Rashi'
 }
 
 def add_new_members(data, new_members, server_members):

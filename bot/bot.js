@@ -1,5 +1,3 @@
-import fs from "fs";
-import {config} from "./config.js";
 import {Client, GatewayIntentBits, ChannelType} from 'discord.js';
 import {handleReady} from "./event_handlers.js";
 
@@ -21,40 +19,6 @@ client.once("ready", async () => {
 
 });
 
-// Create a private thread when an event is created
-// client.on("guildScheduledEventCreate",   async (event) => {
-//     // Create private thread
-//     const thread_id = await createChat(
-//         channel,
-//         event.name
-//     );
-//     await addMembersToPrivateThread(
-//         channel,
-//         thread_id,
-//         interested_members[event.name]
-//     )
-// });
-//
-// // Once the chat is already created and someone selects interested in the event
-// client.on("guildScheduledEventUserAdd", async (event, user) => {
-//     const threadId = await getThreadID(channel, event.name);
-//
-//     if (!threadId) {
-//         throw new Error(`No thread found for ${event.name}`);
-//     }
-//
-//     await addMembersToPrivateThread(channel, threadId, [user.id]);
-// });
-
-
-async function getServerEvents(server){
-    if (!server) console.log("No such server. Please check the specified server ID.") ;
-    console.log(`INFO: SERVER: ${server.name}`);
-
-    return await server.scheduledEvents.fetch();
-}
-
-
 // +++++++===+++++++++++++++++++++++++++++++++++++++++++++++==========================
 
 
@@ -73,3 +37,6 @@ if (process.env.NODE_ENV !== "test") {
 // If the message can be updated based on the people in the chat.. **__Meet your fellow walkers! :smiley:__**
 // :sunflower:**Total:  6 **
 // :rotating_light: Please let me know **here** if you **cannot** make it. :slight_smile:
+// Have this running on a server
+// Have a cache tracking event and the chat.. who left/were removed from the chat and when,
+//  who said they weren't interested and when? clear cache and store data in another db for analysis when the event ends

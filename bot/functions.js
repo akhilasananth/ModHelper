@@ -2,7 +2,6 @@ import {ChannelType} from "discord.js";
 import fs from "fs";
 import {config} from "./config.js";
 
-
 export async function createEventChats(channel, eventsWithoutPrivateChat){
     for (const event of eventsWithoutPrivateChat) {
         // Create chat and send welcome message
@@ -40,7 +39,8 @@ async function createPrivateChat(channel, event_name) {
     const message =
         `Welcome ❤️ to the private chat for ${event_name}!\n` +
         `Please do not share meetup details outside this chat. 🙅🏻‍♂️\n` +
-        `Ask the organizer first if you need to share it with someone.`
+        `Ask the organizer first if you need to share it with someone.\n`+
+        `:rotating_light: Please let me know **here** if you **cannot** make it. :slight_smile:`
 
     await privateChat?.send(message);
     return privateChat
@@ -100,14 +100,14 @@ function printEventWalkers(eventWalkerIds) {
 }
 
 async function getNewEventSubscribers(privateChat, serverEvent) {
-    const eventSubscriberIds = new Set((await serverEvent.fetchSubscribers()).keys());
-    const privateChatMemberIDs = new Set((await privateChat.members.fetch()).keys());
+    // const cancelledUsers = new Set()
+    const eventSubscriberIds = new Set((await serverEvent?.fetchSubscribers())?.keys());
+    const privateChatMemberIDs = new Set((await privateChat?.members.fetch())?.keys());
 
     return eventSubscriberIds.difference(privateChatMemberIDs);
-
 }
 
-export async function printNewEventSubscribersToPrivateThreads(privateChats, serverEvents) {
+export async function printNewIntroducedEventSubscribers(privateChats, serverEvents) {
     console.log(`INFO: Checking for new event subscribers...`);
 
     const eventsByName = new Map([...serverEvents.values()].map(event => [event.name, event]));
@@ -119,7 +119,6 @@ export async function printNewEventSubscribersToPrivateThreads(privateChats, ser
 
         if (newEventSubscriberIds.size > 0) {
             console.log(`INFO: EVENT: ${serverEvent.name}`);
-            console.log(newEventSubscriberIds)
             printEventWalkers(newEventSubscriberIds);
         } else console.log(`INFO: All subscribers to the event are added to the private chat. No Missing subscribers found!`);
     }
